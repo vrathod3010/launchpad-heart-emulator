@@ -1,7 +1,7 @@
 // Require the express web application framework (https://expressjs.com)
 var express = require('express')
 var bodyParser = require('body-parser')
-
+var port = process.env.PORT || 8080;
 var axios = require('axios').default;
 
 // Create a new web application by calling the express function
@@ -67,7 +67,7 @@ function getRandomInt(min, max) {
 }
 
 // Tell our application to listen to requests at port 3000 on the localhost
-app.listen(3000, function () {
+app.listen(port, function () {
   // When the application starts, print to the console that our app is
   // running at http://localhost:3000. Print another message indicating
   // how to shut the server down.
