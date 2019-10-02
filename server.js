@@ -21,6 +21,7 @@ app.post("/start", function(request, response, next) {
   console.log(request.body.code);
 
   if (request.body.code == "7788") {
+    response.write("Emulator is running, to stop it go back and press stop");
     axios
       .get(getUrl)
       .then(function(response) {
@@ -47,6 +48,7 @@ app.post("/start", function(request, response, next) {
       });
   } else {
     console.log("no match");
+    response.write("Wrong code");
   }
 
   response.end();
@@ -55,7 +57,7 @@ app.post("/start", function(request, response, next) {
 app.post("/stop", function(request, response, next) {
   isStarted = false;
   console.log("stopped");
-
+  response.write("emulator stopped");
   clearInterval(window.interval);
   response.end();
 });
