@@ -14,36 +14,36 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Create a new web application by calling the express function
 
-app.post("/data", function(request, response, next) {
-  let getUrl = "https://launchpad-heart-lb.herokuapp.com/api/patients";
+// app.post("/data", function(request, response, next) {
+//   let getUrl = "https://launchpad-heart-lb.herokuapp.com/api/patients";
 
-  axios
-    .get(getUrl)
-    .then(function(response) {
-      var patientData = response.data;
-      //console.log(patientData);
-      // check if the emulator has already started or not
+//   axios
+//     .get(getUrl)
+//     .then(function(response) {
+//       var patientData = response.data;
+//       //console.log(patientData);
+//       // check if the emulator has already started or not
 
-      if (isStarted === true) return;
+//       if (isStarted === true) return;
 
-      isStarted = true;
-      // loop through the individual data and store random mock up data in the table
-      setInterval(() => {
-        patientData.forEach(function(element) {
-          postVitalData(element.id);
-        });
-      }, 5000);
-    })
-    .catch(function(error) {
-      // handle error
-      console.log(error);
-    })
-    .finally(function() {
-      // always executed
-    });
+//       isStarted = true;
+//       // loop through the individual data and store random mock up data in the table
+//       setInterval(() => {
+//         patientData.forEach(function(element) {
+//           postVitalData(element.id);
+//         });
+//       }, 60000);
+//     })
+//     .catch(function(error) {
+//       // handle error
+//       console.log(error);
+//     })
+//     .finally(function() {
+//       // always executed
+//     });
 
-  response.end();
-});
+//   response.end();
+// });
 
 app.post("/start", function(request, response, next) {
   let getUrl = "https://launchpad-heart-lb.herokuapp.com/api/patients";
@@ -55,7 +55,7 @@ app.post("/start", function(request, response, next) {
       //console.log(patientData);
       // check if the emulator has already started or not
 
-      if (isStarted === true) return;
+      if (isStarted == true) return;
 
       isStarted = true;
       // loop through the individual data and store random mock up data in the table
@@ -63,7 +63,7 @@ app.post("/start", function(request, response, next) {
         patientData.forEach(function(element) {
           postVitalData(element.id);
         });
-      }, 5000);
+      }, 60000);
     })
     .catch(function(error) {
       // handle error
@@ -92,7 +92,8 @@ function postVitalData(patientId) {
       weight: getRandomInt(40, 100),
       bloodOxygen: getRandomInt(80, 120),
       sleep: getRandomInt(1, 15),
-      physicalActivity: {}
+      physicalActivity: {},
+      logTime: Date.now()
     })
     .then(function(response) {
       //console.log(response);
@@ -114,6 +115,6 @@ app.listen(port, function() {
   // When the application starts, print to the console that our app is
   // running at http://localhost:3000. Print another message indicating
   // how to shut the server down.
-  console.log("Web server running at: http://localhost:3000");
+  console.log("Web server running at: http://localhost:8080");
   console.log("Type Ctrl+C to shut down the web server");
 });
