@@ -45,6 +45,43 @@ app.post("/data", function(request, response, next) {
   response.end();
 });
 
+app.post("/start", function(request, response, next) {
+  let getUrl = "https://launchpad-heart-lb.herokuapp.com/api/patients";
+
+  axios
+    .get(getUrl)
+    .then(function(response) {
+      var patientData = response.data;
+      //console.log(patientData);
+      // check if the emulator has already started or not
+
+      if (isStarted === true) return;
+
+      isStarted = true;
+      // loop through the individual data and store random mock up data in the table
+      setInterval(() => {
+        patientData.forEach(function(element) {
+          postVitalData(element.id);
+        });
+      }, 5000);
+    })
+    .catch(function(error) {
+      // handle error
+      console.log(error);
+    })
+    .finally(function() {
+      // always executed
+    });
+
+  response.end();
+});
+
+app.post("/stop", function(request, response, next) {
+  isStarted = false;
+  console.log("stopped");
+  response.end();
+});
+
 function postVitalData(patientId) {
   let url = `https://launchpad-heart-lb.herokuapp.com/api/patients/${patientId}/sensorData`;
   axios
