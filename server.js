@@ -20,7 +20,7 @@ app.post("/start", function(request, response, next) {
 
   console.log(request.body.code);
 
-  if (request.body.code == "0000") {
+  if (request.body.code == "7788") {
     axios
       .get(getUrl)
       .then(function(response) {
