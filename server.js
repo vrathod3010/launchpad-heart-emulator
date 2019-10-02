@@ -6,7 +6,7 @@ var axios = require("axios").default;
 
 // Create a new web application by calling the express function
 var app = express();
-
+var isStarted = false;
 // Tell our application to serve all the files under the `public_html` directory
 app.use(express.static("public"));
 
@@ -22,6 +22,11 @@ app.post("/data", function(request, response, next) {
     .then(function(response) {
       var patientData = response.data;
       //console.log(patientData);
+      // check if the emulator has already started or not
+
+      if (isStarted === true) return;
+
+      isStarted = true;
       // loop through the individual data and store random mock up data in the table
       setInterval(() => {
         patientData.forEach(function(element) {
