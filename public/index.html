@@ -25,10 +25,16 @@
         <div class="row">
           <div class="col text-center">
             <form action="/start" method="POST">
-              <button class="btn btn-primary">Start Emulator</button>
+              <input placeholder="code" type="text" name="code" />
+
+              <br />
+              <button class="btn btn-primary mt-2">
+                Start Emulator</button
+              ><br />
             </form>
-            <form action="/stop" method="POST">
+            <form action="/stop" method="POST" class="mt-5">
               <button class="btn btn-secondary">Stop Emulator</button>
+              <br />
             </form>
           </div>
         </div>

@@ -3,6 +3,9 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var port = process.env.PORT || 8080;
 var axios = require("axios").default;
+const Window = require("window");
+
+const window = new Window();
 
 // Create a new web application by calling the express function
 var app = express();
@@ -12,66 +15,39 @@ app.use(express.static("public"));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Create a new web application by calling the express function
-
-// app.post("/data", function(request, response, next) {
-//   let getUrl = "https://launchpad-heart-lb.herokuapp.com/api/patients";
-
-//   axios
-//     .get(getUrl)
-//     .then(function(response) {
-//       var patientData = response.data;
-//       //console.log(patientData);
-//       // check if the emulator has already started or not
-
-//       if (isStarted === true) return;
-
-//       isStarted = true;
-//       // loop through the individual data and store random mock up data in the table
-//       setInterval(() => {
-//         patientData.forEach(function(element) {
-//           postVitalData(element.id);
-//         });
-//       }, 60000);
-//     })
-//     .catch(function(error) {
-//       // handle error
-//       console.log(error);
-//     })
-//     .finally(function() {
-//       // always executed
-//     });
-
-//   response.end();
-// });
-
 app.post("/start", function(request, response, next) {
   let getUrl = "https://launchpad-heart-lb.herokuapp.com/api/patients";
 
-  axios
-    .get(getUrl)
-    .then(function(response) {
-      var patientData = response.data;
-      //console.log(patientData);
-      // check if the emulator has already started or not
+  console.log(request.body.code);
 
-      if (isStarted == true) return;
+  if (request.body.code == "0000") {
+    axios
+      .get(getUrl)
+      .then(function(response) {
+        var patientData = response.data;
+        //console.log(patientData);
+        // check if the emulator has already started or not
 
-      isStarted = true;
-      // loop through the individual data and store random mock up data in the table
-      setInterval(() => {
-        patientData.forEach(function(element) {
-          postVitalData(element.id);
-        });
-      }, 60000);
-    })
-    .catch(function(error) {
-      // handle error
-      console.log(error);
-    })
-    .finally(function() {
-      // always executed
-    });
+        if (isStarted == true) return;
+
+        isStarted = true;
+        // loop through the individual data and store random mock up data in the table
+        window.interval = setInterval(() => {
+          patientData.forEach(function(element) {
+            postVitalData(element.id);
+          });
+        }, 60000);
+      })
+      .catch(function(error) {
+        // handle error
+        console.log(error);
+      })
+      .finally(function() {
+        // always executed
+      });
+  } else {
+    console.log("no match");
+  }
 
   response.end();
 });
@@ -79,6 +55,8 @@ app.post("/start", function(request, response, next) {
 app.post("/stop", function(request, response, next) {
   isStarted = false;
   console.log("stopped");
+
+  clearInterval(window.interval);
   response.end();
 });
 
@@ -110,11 +88,7 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// Tell our application to listen to requests at port 3000 on the localhost
 app.listen(port, function() {
-  // When the application starts, print to the console that our app is
-  // running at http://localhost:3000. Print another message indicating
-  // how to shut the server down.
   console.log("Web server running at: http://localhost:8080");
   console.log("Type Ctrl+C to shut down the web server");
 });
